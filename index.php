@@ -256,6 +256,7 @@ if (isset($_POST['email']) && isset($_POST["street"]) && isset($_POST["streetnum
     $style_success_city = "style='display:none;'";
     $style_success_zipcode = "style='display:none;'";
     $style_success_products = "style='display:none;'";
+    $email = $street = $streetnumber = $city = $zipcode = "";
 }; 
 
 // Form invalidated
