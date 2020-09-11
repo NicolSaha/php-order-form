@@ -19,20 +19,23 @@ function whatIsHappening() {
 whatIsHappening();
 
 //your products with their price.
-$products = [
-    ['name' => 'Club Ham', 'price' => 3.20],
-    ['name' => 'Club Cheese', 'price' => 3],
-    ['name' => 'Club Cheese & Ham', 'price' => 4],
-    ['name' => 'Club Chicken', 'price' => 4],
-    ['name' => 'Club Salmon', 'price' => 5]
-];
 
-$products = [
-    ['name' => 'Cola', 'price' => 2],
-    ['name' => 'Fanta', 'price' => 2],
-    ['name' => 'Sprite', 'price' => 2],
-    ['name' => 'Ice-tea', 'price' => 3],
+if (isset($_GET["food"]) && $_GET['food'] == 1) {
+ $products = [
+    ['name' => 'Kombucha', 'price' => 2],
+    ['name' => 'Gimber', 'price' => 2],
+    ['name' => 'Matcha Latte', 'price' => 3],
+    ['name' => 'Golden Mylk', 'price' => 3], 
 ];
+} else {
+$products = [
+    ['name' => 'Mediterranean Goodness', 'price' => 3.20],
+    ['name' => 'BBQ Tofu', 'price' => 3],
+    ['name' => 'Meatless Loaf', 'price' => 4],
+    ['name' => 'Pesto Vegetable Grill', 'price' => 4],
+    ['name' => 'Roasted Portobello', 'price' => 5]
+];
+};
 
 $totalValue = 0;
 
@@ -263,6 +266,10 @@ if (isset($_POST['email']) && isset($_POST["street"]) && isset($_POST["streetnum
 if ($return_email == false || $return_street == false || $return_streetnumber == false || $return_city == false || $return_zipcode == false || $return_products == false)  
  {   $style_success = "style='display:none;'";
  };
+
+ // Switch from food to drinks
+//$_GET['food'];
+
 
  // Email order to yourself
     $email_to = "nicol.saha@gmail.com";

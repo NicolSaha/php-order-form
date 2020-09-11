@@ -15,11 +15,12 @@
     <nav>
         <ul class="nav">
             <li class="nav-item">
-                <a class="nav-link active" href="?food=1">Order food</a>
+                <a class="nav-link" href="?food=0">Order food</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="?food=0">Order drinks</a>
+                <a class="nav-link active" href="?food=1">Order drinks</a>
             </li>
+            
         </ul>
     </nav>
     <div class="alert alert-success" role="alert" <?php echo $style_success ?>> <?php echo $thankyou_message ?> </div>
