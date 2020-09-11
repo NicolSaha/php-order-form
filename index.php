@@ -29,7 +29,7 @@ if (isset($_GET["food"]) && $_GET['food'] == 1) {
 ];
 } else {
 $products = [
-    ['name' => 'Mediterranean Goodness', 'price' => 3.20],
+    ['name' => 'Mediterranean Goodness', 'price' => 3],
     ['name' => 'BBQ Tofu', 'price' => 3],
     ['name' => 'Meatless Loaf', 'price' => 4],
     ['name' => 'Pesto Vegetable Grill', 'price' => 4],
@@ -88,6 +88,7 @@ $error_message_streetnumber = "";
 $error_message_city = "";
 $error_message_zipcode = "";
 $error_message_products = "";
+$error_message_delivery = "";
 
 // Success Alert Message
 $success_message_email = "";
@@ -96,6 +97,7 @@ $success_message_streetnumber = "";
 $success_message_city = "";
 $success_message_zipcode = "";
 $success_message_products = "";
+$success_message_delivery = "";
 
 // Warning style alert
 $style_warning_email = "";
@@ -104,6 +106,7 @@ $style_warning_streetnumber = "";
 $style_warning_city = "";
 $style_warning_zipcode = "";
 $style_warning_products ="";
+$style_warning_delivery ="";
 
 // Success style alert
 $style_success_email = "";
@@ -112,6 +115,7 @@ $style_success_streetnumber = "";
 $style_success_city = "";
 $style_success_zipcode = "";
 $style_success_products ="";
+$style_success_delivery ="";
 
 // Validate true or false
 $return_email = "";
@@ -120,6 +124,7 @@ $return_streetnumber = "";
 $return_city = "";
 $return_zipcode = "";
 $return_products ="";
+$return_delivery ="";
 
 /* $style_warning_show= "";
 $style_warning = array();
@@ -239,12 +244,39 @@ if (isset($_POST['email']) && isset($_POST["street"]) && isset($_POST["streetnum
         $success_message_products .= "Valid Choice!";
     };
 
+// Delivery time
+ if(isset($_POST['normaldelivery']) || isset($_POST['expressdelivery']) ) {
+        $return_delivery = true; 
+        $style_warning_delivery = "style='display:none;'";
+        $success_message_delivery .= "Valid!";
+    } else {
+        $return_delivery = false;
+        $style_success_delivery = "style='display:none;'";
+        $error_message_delivery .= 'Please make a choice.<br>';
+    };
+
+
 // Message for user if form is validated
     $thankyou_message = "";
 
- if ($return_email == true && $return_street == true && $return_streetnumber == true && $return_city == true && $return_zipcode == true && $return_products == true)  
+ if ($return_email == true && $return_street == true && $return_streetnumber == true && $return_city == true && $return_zipcode == true && $return_products == true && $return_delivery == true )  
  {
-    $thankyou_message = 'Your order is submitted, thank you';
+  
+    // Save time in SESSION
+    $_SESSION['timeOfOrdering'] = date('H:i');
+    $timeOfOrdering = (null !== $_SESSION['timeOfOrdering']) ? $_SESSION ['timeOfOrdering'] : '';
+
+    $_SESSION['expectedDeliveryNormal'] = date('H:i',strtotime('+2 hour',strtotime($timeOfOrdering)));
+    $expectedDeliveryNormal = (null !== $_SESSION['expectedDeliveryNormal']) ? $_SESSION ['expectedDeliveryNormal'] : '';
+
+    $_SESSION['expectedDeliveryExpress'] = date('H:i',strtotime('+45 minutes',strtotime($timeOfOrdering)));
+    $expectedDeliveryExpress = (null !== $_SESSION['expectedDeliveryExpress']) ? $_SESSION ['expectedDeliveryExpress'] : '';
+
+    if(isset($_POST['normaldelivery'])){
+        $thankyou_message = 'Thank you for placing an order! The estimated delivery time is ' . $_SESSION['expectedDeliveryNormal'] . '.';
+    } else {
+        $thankyou_message = 'Thank you for placing an order! The estimated delivery time is ' . $_SESSION['expectedDeliveryExpress'] . '.';
+    }
 
     $style_warning_email = "style='display:none;'";
     $style_warning_street = "style='display:none;'";
@@ -252,6 +284,7 @@ if (isset($_POST['email']) && isset($_POST["street"]) && isset($_POST["streetnum
     $style_warning_city = "style='display:none;'";
     $style_warning_zipcode = "style='display:none;'";
     $style_warning_products = "style='display:none;'";
+    $style_warning_delivery = "style='display:none;'";
 
     $style_success_email = "style='display:none;'";
     $style_success_street = "style='display:none;'";
@@ -259,16 +292,17 @@ if (isset($_POST['email']) && isset($_POST["street"]) && isset($_POST["streetnum
     $style_success_city = "style='display:none;'";
     $style_success_zipcode = "style='display:none;'";
     $style_success_products = "style='display:none;'";
+    $style_success_delivery = "style='display:none;'";
+    
     $email = $street = $streetnumber = $city = $zipcode = "";
 }; 
 
 // Form invalidated
-if ($return_email == false || $return_street == false || $return_streetnumber == false || $return_city == false || $return_zipcode == false || $return_products == false)  
+if ($return_email == false || $return_street == false || $return_streetnumber == false || $return_city == false || $return_zipcode == false || $return_products == false || $return_delivery == false )  
  {   $style_success = "style='display:none;'";
  };
 
- // Switch from food to drinks
-//$_GET['food'];
+// Total revenue counter
 
 
  // Email order to yourself

@@ -80,6 +80,16 @@
             <?php endforeach; ?>
         </fieldset>
 
+        <fieldset>
+            <legend>Delivery</legend>
+            <div class="alert alert-danger" id="products-alert" role="alert" <?php echo $style_warning_delivery?> > <?php echo $error_message_delivery; ?> </div>
+            <div class="alert alert-success" id="products-alert" role="alert" <?php echo $style_success_delivery?> > <?php echo $success_message_delivery; ?> </div>
+                <input type="checkbox" value="Normal" name="normaldelivery"/>
+                    <label for="normaldelivery">Normal (2h)</label>  <br />
+                <input type="checkbox" value="Express" name="expressdelivery"/>
+                    <label for="normaldelivery">Express (45min)</label>
+        </fieldset>
+
         <button type="submit" class="btn btn-primary">Order!</button>
     </form>
 
