@@ -163,7 +163,7 @@ if (isset($_POST['email']) && isset($_POST["street"]) && isset($_POST["streetnum
     } else {
      $error_message_email .= 'The email you entered is invalid.<br>';
      $style_success_email = "style='display:none;'";
-     $return_email = true;
+     $return_email = false;
      $email="";
     }
 
@@ -227,11 +227,11 @@ if (isset($_POST['email']) && isset($_POST["street"]) && isset($_POST["streetnum
 
 // Product choice validate 
  if(isset($_POST['products']) == 0) {
-        $return_products == false; 
+        $return_products = false; 
         $style_success_products = "style='display:none;'";
         $error_message_products .= 'Please make a choice.<br>';
     } else {
-        $return_products == true;
+        $return_products = true;
         $style_warning_products = "style='display:none;'";
         $success_message_products .= "Valid Choice!";
     };
@@ -255,7 +255,7 @@ if (isset($_POST['email']) && isset($_POST["street"]) && isset($_POST["streetnum
     $style_success_streetnumber ="style='display:none;'";
     $style_success_city = "style='display:none;'";
     $style_success_zipcode = "style='display:none;'";
-    $style_warning_products = "style='display:none;'";
+    $style_success_products = "style='display:none;'";
 }; 
 
 // Form invalidated
