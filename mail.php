@@ -65,7 +65,6 @@ function sendEmail($totalValue)
     $mail->send();
     // INFORM USER
     return 'Email sent to <b>' . $customerEmail . '</b>.';
-    //$totalValue = 0;
   } catch (Exception $e) {
     return "Email failed to send to <b>$customerEmail</b>. ";
     //To show error add= Error: {$mail->ErrorInfo}

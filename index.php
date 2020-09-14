@@ -112,6 +112,7 @@ $error_message_streetnumber = "";
 $error_message_city = "";
 $error_message_zipcode = "";
 $error_message_products = "";
+$error_message_delivery ="";
 
 // Success Alert Message
 $success_message_email = "";
@@ -129,6 +130,7 @@ $style_warning_streetnumber = "";
 $style_warning_city = "";
 $style_warning_zipcode = "";
 $style_warning_products ="";
+$style_warning_delivery="";
 
 // Success style alert
 $style_success_email = "";
@@ -168,6 +170,7 @@ if (empty($_POST['email']) && empty($_POST["street"]) && empty($_POST["streetnum
     $style_warning_zipcode =  "style='display:none;'";
     $style_success_zipcode = "style='display:none;'";
     $style_success_delivery = "style='display:none;'";
+    $style_warning_delivery= "style='display:none;'";
 };
 
 //Form filled --> start data checking
@@ -258,29 +261,36 @@ if (isset($_POST['email']) && isset($_POST["street"]) && isset($_POST["streetnum
  if(isset($_POST['normaldelivery']) || isset($_POST['expressdelivery'])) {
         $return_delivery = true; 
         $success_message_delivery .= "Valid!";
+        $style_warning_delivery .= "style='display:none;'";
+    }else {
+        $return_delivery = false;
+        $error_message_delivery .="Please make a choice.";
+        $style_success_delivery.= "style='display:none;'";
+
     };
+
+// Save time in SESSION
+    $timeOfOrdering = (null !== $_SESSION['timeOfOrdering']) ? $_SESSION ['timeOfOrdering'] : '';
+    $_SESSION['timeOfOrdering'] = date('H:i');
+
+    $expectedDeliveryNormal = (null !== $_SESSION['expectedDeliveryNormal']) ? $_SESSION ['expectedDeliveryNormal'] : '';
+    $_SESSION['expectedDeliveryNormal'] = date('H:i',strtotime('+2 hour',strtotime($timeOfOrdering)));
+    
+    $expectedDeliveryExpress = (null !== $_SESSION['expectedDeliveryExpress']) ? $_SESSION ['expectedDeliveryExpress'] : '';
+    $_SESSION['expectedDeliveryExpress'] = date('H:i',strtotime('+45 minutes',strtotime($timeOfOrdering)));
+    
 
 // Validation Message User
     $thankyou_message = "";
  if ($return_email == true && $return_street == true && $return_streetnumber == true && $return_city == true && $return_zipcode == true && $return_products == true && $return_delivery == true )  
  {
-  
-    // Save time in SESSION
-    $_SESSION['timeOfOrdering'] = date('H:i');
-    $timeOfOrdering = (null !== $_SESSION['timeOfOrdering']) ? $_SESSION ['timeOfOrdering'] : '';
-
-    $_SESSION['expectedDeliveryNormal'] = date('H:i',strtotime('+2 hour',strtotime($timeOfOrdering)));
-    $expectedDeliveryNormal = (null !== $_SESSION['expectedDeliveryNormal']) ? $_SESSION ['expectedDeliveryNormal'] : '';
-
-    $_SESSION['expectedDeliveryExpress'] = date('H:i',strtotime('+45 minutes',strtotime($timeOfOrdering)));
-    $expectedDeliveryExpress = (null !== $_SESSION['expectedDeliveryExpress']) ? $_SESSION ['expectedDeliveryExpress'] : '';
-
     $style_warning_email = "style='display:none;'";
     $style_warning_street = "style='display:none;'";
     $style_warning_streetnumber = "style='display:none;'";
     $style_warning_city = "style='display:none;'";
     $style_warning_zipcode = "style='display:none;'";
     $style_warning_products = "style='display:none;'";
+    $style_warning_delivery= "style='display:none;'";
 
     $style_success_email = "style='display:none;'";
     $style_success_street = "style='display:none;'";
@@ -290,16 +300,19 @@ if (isset($_POST['email']) && isset($_POST["street"]) && isset($_POST["streetnum
     $style_success_products = "style='display:none;'";
     $style_success_delivery = "style='display:none;'";
     
-    $email = $street = $streetnumber = $city = $zipcode = "";
+    $email = "";
+    //$street = $streetnumber = $city = $zipcode = 
     
    //Sending mail
     $emailSentMessage = sendEmail($totalValue);
     
     if(isset($_POST['normaldelivery'])){
-        $thankyou_message = $emailSentMessage . ' <br/>Thank you for placing an order! The estimated delivery time is ' .  $expectedDeliveryNormal  . '.';
-    } else {
-        $thankyou_message = $emailSentMessage . 'Thank you for placing an order! The estimated delivery time is ' .   $expectedDeliveryExpress . '.';
+        $thankyou_message = $emailSentMessage . ' <br/>Thank you for placing an order! The estimated delivery time is ' .  $expectedDeliveryNormal  . '. <br/> Total order value = €' . number_format($totalValue)  ;
+    } 
+    else {
+        $thankyou_message = $emailSentMessage . ' <br/>Thank you for placing an order! <br/> The estimated delivery time is ' .   $expectedDeliveryExpress . '. <br/> Total order value = €' . number_format($totalValue + 5)  ;
     }
+    $totalValue = 0;
    
 }; 
 
@@ -307,26 +320,6 @@ if (isset($_POST['email']) && isset($_POST["street"]) && isset($_POST["streetnum
 if ($return_email == false || $return_street == false || $return_streetnumber == false || $return_city == false || $return_zipcode == false || $return_products == false || $return_delivery == false )  
  {   $style_success = "style='display:none;'";
  };
- 
- 
-
-/* $style_warning_show= "";
-$style_warning = array();
-array_push($style_warning, $_POST['email']);
-array_push($style_warning, $_POST["street"]);
-array_push($style_warning, $_POST["city"]);
-array_push($style_warning, $_POST["zipcode"]);
-print_r($style_warning);
-
-foreach ( $style_warning as $style_warning_message ) {
-  if ($style = false) {   
-    $style_warning_show= "style='display:none;'";
-  } else {
-    $style = "";
-  }
-} */
-
-
  
 require 'form-view.php'; 
 

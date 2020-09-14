@@ -82,11 +82,12 @@
 
         <fieldset>
             <legend>Delivery</legend>
+            <div class="alert alert-danger" id="products-alert" role="alert" <?php echo $style_warning_delivery?> > <?php echo $error_message_delivery; ?> </div>
             <div class="alert alert-success" id="products-alert" role="alert" <?php echo $style_success_delivery?> > <?php echo $success_message_delivery; ?> </div>
-                <input type="checkbox" value="0" name="normaldelivery" checked/>
-                    <label for="normaldelivery">Normal (2h) - Free</label>  <br />
+                <input type="checkbox" value="0" name="normaldelivery"/>
+                    <label for="normaldelivery">Normal (2h) - Free </label>  <br />
                 <input type="checkbox" value="1" name="expressdelivery" />
-                    <label for="expressdelivery">Express (45min) - €5.00</label> <br />
+                    <label for="expressdelivery">Express (45min) - €5.00 </label> <br />
         </fieldset> <br />
 
         <button type="submit" class="btn btn-primary">Order!</button>
