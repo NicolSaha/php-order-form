@@ -11,7 +11,7 @@
 </head>
 <body>
 <div class="container">
-    <h1>Order food in restaurant "the Personal Ham Processors"</h1>
+    <h1 style='text-align: center;';>Rawrrrrr Food & Drinks</h1>
     <nav>
         <ul class="nav">
             <li class="nav-item">
@@ -44,7 +44,7 @@
                 <div class="alert alert-danger" id="street-alert" role="alert" <?php echo $style_warning_street?> > <?php echo $error_message_street; ?> </div>
                 <div class="alert alert-success" id="street-alert" role="alert" <?php echo $style_success_street?> > <?php echo $success_message_street; ?> </div>
                     <label for="street">Street:</label>
-                    <input type="text" name="street" id="street" class="form-control" value="<?php echo $street; ?>" required>
+                    <input type="text" name="street" id="street" class="form-control" value="<?php echo ucfirst($street); ?>" required>
                 </div>
                 <div class="form-group col-md-6">
                 <div class="alert alert-danger" id="streetnumber-alert" role="alert" <?php echo $style_warning_streetnumber?> > <?php echo $error_message_streetnumber; ?> </div>
@@ -58,7 +58,7 @@
                 <div class="alert alert-danger" id="city-alert" role="alert" <?php echo $style_warning_city?> > <?php echo $error_message_city; ?> </div>
                 <div class="alert alert-success" id="city-alert" role="alert" <?php echo $style_success_city?> > <?php echo $success_message_city; ?> </div>
                     <label for="city">City:</label>
-                    <input type="text" id="city" name="city" class="form-control" value="<?php echo $city; ?>" required>
+                    <input type="text" id="city" name="city" class="form-control" value="<?php echo ucfirst($city); ?>" required>
                 </div>
                 <div class="form-group col-md-6">
                 <div class="alert alert-danger" id="zipcode-alert" role="alert" <?php echo $style_warning_zipcode?> > <?php echo $error_message_zipcode; ?> </div>
@@ -75,25 +75,24 @@
             <div class="alert alert-success" id="products-alert" role="alert" <?php echo $style_success_products?> > <?php echo $success_message_products; ?> </div>
             <?php foreach ($products AS $i => $product): ?>
                 <label>
-                    <input type="checkbox" value="1" name="products[<?php echo $i ?>]"/> <?php echo $product['name'] ?> -
+                    <input type="checkbox" value="<?= $product['price'] ?>" name="products[<?php echo $i ?>]"/> <?php echo $product['name'] ?> -
                     &euro; <?php echo number_format($product['price'], 2) ?></label><br />
             <?php endforeach; ?>
-        </fieldset>
+        </fieldset> <br />
 
         <fieldset>
             <legend>Delivery</legend>
-            <div class="alert alert-danger" id="products-alert" role="alert" <?php echo $style_warning_delivery?> > <?php echo $error_message_delivery; ?> </div>
             <div class="alert alert-success" id="products-alert" role="alert" <?php echo $style_success_delivery?> > <?php echo $success_message_delivery; ?> </div>
-                <input type="checkbox" value="Normal" name="normaldelivery"/>
-                    <label for="normaldelivery">Normal (2h)</label>  <br />
-                <input type="checkbox" value="Express" name="expressdelivery"/>
-                    <label for="normaldelivery">Express (45min)</label>
-        </fieldset>
+                <input type="checkbox" value="0" name="normaldelivery" checked/>
+                    <label for="normaldelivery">Normal (2h) - Free</label>  <br />
+                <input type="checkbox" value="1" name="expressdelivery" />
+                    <label for="expressdelivery">Express (45min) - €5.00</label> <br />
+        </fieldset> <br />
 
         <button type="submit" class="btn btn-primary">Order!</button>
     </form>
 
-    <footer>You already ordered <strong>&euro; <?php echo $totalValue ?></strong> in food and drinks.</footer>
+    <footer>You already ordered <strong>&euro; <?php echo $totalValue ?></strong> in food and drinks.</footer><br /><br /><br />
 </div>
 
 <style>

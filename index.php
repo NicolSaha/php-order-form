@@ -2,6 +2,10 @@
 //this line makes PHP behave in a more strict way
 declare(strict_types=1);
 
+//PHPmailer Dependencies + Autoloader
+require 'mail.php';
+require 'vendor/autoload.php';
+
 //we are going to use session variables so we need to enable sessions
 session_start();
 
@@ -19,7 +23,6 @@ function whatIsHappening() {
 whatIsHappening();
 
 //your products with their price.
-
 if (isset($_GET["food"]) && $_GET['food'] == 1) {
  $products = [
     ['name' => 'Kombucha', 'price' => 2],
@@ -27,6 +30,7 @@ if (isset($_GET["food"]) && $_GET['food'] == 1) {
     ['name' => 'Matcha Latte', 'price' => 3],
     ['name' => 'Golden Mylk', 'price' => 3], 
 ];
+
 } else {
 $products = [
     ['name' => 'Mediterranean Goodness', 'price' => 3],
@@ -36,8 +40,27 @@ $products = [
     ['name' => 'Roasted Portobello', 'price' => 5]
 ];
 };
+ 
+ 
 
-$totalValue = 0;
+// Get price and add to total revenue counter
+ if (isset ($_POST['products'])) {
+  $totalValue=0;
+  $totalValue= calculateTotal($totalValue);
+  
+}
+ else{
+    $totalValue=0;
+} 
+
+function calculateTotal($totalValue) {
+    //$totalValue = 0;
+    $n = $_POST['products'];
+    foreach ($n as $price) {
+    $totalValue += $price;   
+    }
+    return $totalValue;
+}
 
 // Clean input data
 function sanitizeData($data)
@@ -48,7 +71,8 @@ function sanitizeData($data)
     return $data;
 }
 
-// Form validation
+// FORM VALIDATION
+// Setting variables
 $email = (isset($_POST["email"])) ? sanitizeData($_POST['email']) : '';
 
 // Address SESSION setting
@@ -88,7 +112,6 @@ $error_message_streetnumber = "";
 $error_message_city = "";
 $error_message_zipcode = "";
 $error_message_products = "";
-$error_message_delivery = "";
 
 // Success Alert Message
 $success_message_email = "";
@@ -106,7 +129,6 @@ $style_warning_streetnumber = "";
 $style_warning_city = "";
 $style_warning_zipcode = "";
 $style_warning_products ="";
-$style_warning_delivery ="";
 
 // Success style alert
 $style_success_email = "";
@@ -126,18 +148,6 @@ $return_zipcode = "";
 $return_products ="";
 $return_delivery ="";
 
-/* $style_warning_show= "";
-$style_warning = array();
-array_push($style_warning, $_POST['email'], $_POST["street"], $_POST["streetnumber"], $_POST["city"], $_POST["zipcode"]);
-print_r($style_warning);
-
-foreach ( $style_warning as $style_warning_message ) {
-  if ($style = false) {   
-    $style_warning_show= $style_success_zipcode = "style='display:none;'";
-  } else {
-    $style = "";
-  }
-} */
 
 // Form invalid
 $style_success = "";
@@ -157,19 +167,19 @@ if (empty($_POST['email']) && empty($_POST["street"]) && empty($_POST["streetnum
     $style_success_city = "style='display:none;'";
     $style_warning_zipcode =  "style='display:none;'";
     $style_success_zipcode = "style='display:none;'";
-
+    $style_success_delivery = "style='display:none;'";
 };
 
-//Form filled
+//Form filled --> start data checking
 if (isset($_POST['email']) && isset($_POST["street"]) && isset($_POST["streetnumber"]) && isset($_POST["city"]) && isset($_POST["zipcode"])) {
 
     // Validate email
     if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-     $success_message_email .= "Valid";
+     $success_message_email = "Valid";
      $style_warning_email = "style='display:none;'";
      $return_email = true;
     } else {
-     $error_message_email .= 'The email you entered is invalid.<br>';
+     $error_message_email = 'The email you entered is invalid.<br>';
      $style_success_email = "style='display:none;'";
      $return_email = false;
      $email="";
@@ -181,52 +191,52 @@ if (isset($_POST['email']) && isset($_POST["street"]) && isset($_POST["streetnum
     $house_numbers_exp= "/^\d+[a-zA-Z]*$/";
 
     if (!preg_match($string_exp, $street)) {
-        $error_message_street .= 'The street you entered is invalid.<br>';
+        $error_message_street = 'The street you entered is invalid.<br>';
         $style_success_street = "style='display:none;'";
         $return_street = false;
         $street= "";
     } else {
         $style_warning_street = "style='display:none;'";
-        $success_message_street .= "Valid";
+        $success_message_street = "Valid";
         $return_street = true;
         $_SESSION["stored_street"] = $street;
     }
 
     if (!preg_match($house_numbers_exp, $streetnumber)) {
-        $error_message_streetnumber .= 'The streetnumber you entered is invalid.<br>';
+        $error_message_streetnumber = 'The streetnumber you entered is invalid.<br>';
         $style_success_streetnumber = "style='display:none;'";
         $return_streenumber = false;
         $streetnumber ="";
     }
     else {
         $style_warning_streetnumber = "style='display:none;'";
-        $success_message_streetnumber .= "Valid";
+        $success_message_streetnumber = "Valid";
         $return_streetnumber = true;
         $_SESSION["stored_streetnumber"] = $streetnumber;
     }
     
     if (!preg_match($string_exp, $city)) {
-        $error_message_city .= 'The city you entered is invalid.<br>';
+        $error_message_city = 'The city you entered is invalid.<br>';
         $style_success_city = "style='display:none;'";
         $return_city = false;
         $city = "";
     }
     else {
        $style_warning_city = "style='display:none;'";
-       $success_message_city .= "Valid";
+       $success_message_city = "Valid";
        $return_city = true;
        $_SESSION["stored_city"] = $city;
     }
 
     if (!preg_match($numbers_exp, $zipcode)) {
-        $error_message_zipcode .= 'The zipcode you entered is invalid.<br>';
+        $error_message_zipcode = 'The zipcode you entered is invalid.<br>';
         $style_success_zipcode = "style='display:none;'";
         $return_zipcode = false;
         $zipcode="";
     }
     else {
        $style_warning_zipcode= "style='display:none;'";
-       $success_message_zipcode .= "Valid";
+       $success_message_zipcode = "Valid";
        $return_zipcode = true;
        $_SESSION["stored_zipcode"] = $zipcode;
     }
@@ -234,7 +244,7 @@ if (isset($_POST['email']) && isset($_POST["street"]) && isset($_POST["streetnum
 };
 
 // Product choice validate 
- if(isset($_POST['products']) == 0) {
+ if(empty($_POST['products'])) {
         $return_products = false; 
         $style_success_products = "style='display:none;'";
         $error_message_products .= 'Please make a choice.<br>';
@@ -245,20 +255,13 @@ if (isset($_POST['email']) && isset($_POST["street"]) && isset($_POST["streetnum
     };
 
 // Delivery time
- if(isset($_POST['normaldelivery']) || isset($_POST['expressdelivery']) ) {
+ if(isset($_POST['normaldelivery']) || isset($_POST['expressdelivery'])) {
         $return_delivery = true; 
-        $style_warning_delivery = "style='display:none;'";
         $success_message_delivery .= "Valid!";
-    } else {
-        $return_delivery = false;
-        $style_success_delivery = "style='display:none;'";
-        $error_message_delivery .= 'Please make a choice.<br>';
     };
 
-
-// Message for user if form is validated
+// Validation Message User
     $thankyou_message = "";
-
  if ($return_email == true && $return_street == true && $return_streetnumber == true && $return_city == true && $return_zipcode == true && $return_products == true && $return_delivery == true )  
  {
   
@@ -272,19 +275,12 @@ if (isset($_POST['email']) && isset($_POST["street"]) && isset($_POST["streetnum
     $_SESSION['expectedDeliveryExpress'] = date('H:i',strtotime('+45 minutes',strtotime($timeOfOrdering)));
     $expectedDeliveryExpress = (null !== $_SESSION['expectedDeliveryExpress']) ? $_SESSION ['expectedDeliveryExpress'] : '';
 
-    if(isset($_POST['normaldelivery'])){
-        $thankyou_message = 'Thank you for placing an order! The estimated delivery time is ' . $_SESSION['expectedDeliveryNormal'] . '.';
-    } else {
-        $thankyou_message = 'Thank you for placing an order! The estimated delivery time is ' . $_SESSION['expectedDeliveryExpress'] . '.';
-    }
-
     $style_warning_email = "style='display:none;'";
     $style_warning_street = "style='display:none;'";
     $style_warning_streetnumber = "style='display:none;'";
     $style_warning_city = "style='display:none;'";
     $style_warning_zipcode = "style='display:none;'";
     $style_warning_products = "style='display:none;'";
-    $style_warning_delivery = "style='display:none;'";
 
     $style_success_email = "style='display:none;'";
     $style_success_street = "style='display:none;'";
@@ -295,29 +291,42 @@ if (isset($_POST['email']) && isset($_POST["street"]) && isset($_POST["streetnum
     $style_success_delivery = "style='display:none;'";
     
     $email = $street = $streetnumber = $city = $zipcode = "";
+    
+   //Sending mail
+    $emailSentMessage = sendEmail($totalValue);
+    
+    if(isset($_POST['normaldelivery'])){
+        $thankyou_message = $emailSentMessage . ' <br/>Thank you for placing an order! The estimated delivery time is ' .  $expectedDeliveryNormal  . '.';
+    } else {
+        $thankyou_message = $emailSentMessage . 'Thank you for placing an order! The estimated delivery time is ' .   $expectedDeliveryExpress . '.';
+    }
+   
 }; 
 
 // Form invalidated
 if ($return_email == false || $return_street == false || $return_streetnumber == false || $return_city == false || $return_zipcode == false || $return_products == false || $return_delivery == false )  
  {   $style_success = "style='display:none;'";
  };
+ 
+ 
 
-// Total revenue counter
+/* $style_warning_show= "";
+$style_warning = array();
+array_push($style_warning, $_POST['email']);
+array_push($style_warning, $_POST["street"]);
+array_push($style_warning, $_POST["city"]);
+array_push($style_warning, $_POST["zipcode"]);
+print_r($style_warning);
+
+foreach ( $style_warning as $style_warning_message ) {
+  if ($style = false) {   
+    $style_warning_show= "style='display:none;'";
+  } else {
+    $style = "";
+  }
+} */
 
 
- // Email order to yourself
-    $email_to = "nicol.saha@gmail.com";
-    $email_subject = "New form submissions";
-    $email_message = "Form details below.\n\n";
-
-    function clean_string($string)
-    {
-        $bad = array("content-type", "bcc:", "to:", "cc:", "href");
-        return str_replace($bad, "", $string);
-    }
-
-    $email_message .= "Email: " . clean_string($email) . "\n";
-    @mail($email_to, $email_subject, $email_message);
-
-    
+ 
 require 'form-view.php'; 
+
