@@ -49,7 +49,7 @@ function sendEmail($totalValue)
     $mail->Host       = 'mail.gmx.com';
     $mail->SMTPAuth   = true;
     $mail->Username   = 'nicolsaha@gmx.com';
-    $mail->Password   = 'justfortesting';
+    $mail->Password   = '';
     $mail->SMTPSecure = 'ssl';
     $mail->Port       =  465;
     // SENDER

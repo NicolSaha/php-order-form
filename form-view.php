@@ -11,14 +11,14 @@
 </head>
 <body>
 <div class="container">
-    <h1 style='text-align: center;';>Rawrrrrr Food & Drinks</h1>
+    <h1 style='text-align: center;';>Rawrestaurant</h1>
     <nav>
         <ul class="nav">
             <li class="nav-item">
-                <a class="nav-link" href="?food=0">Order food</a>
+                <a class="nav-link" href="?food=switchToDrinks" >Order food</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" href="?food=1">Order drinks</a>
+                <a class="nav-link active"  href="?food=switchToMeals" >Order drinks</a>
             </li>
             
         </ul>
@@ -82,11 +82,10 @@
 
         <fieldset>
             <legend>Delivery</legend>
-            <div class="alert alert-danger" id="products-alert" role="alert" <?php echo $style_warning_delivery?> > <?php echo $error_message_delivery; ?> </div>
             <div class="alert alert-success" id="products-alert" role="alert" <?php echo $style_success_delivery?> > <?php echo $success_message_delivery; ?> </div>
-                <input type="checkbox" value="0" name="normaldelivery"/>
+                <input type="radio" value="normal" name="delivery" checked required/>
                     <label for="normaldelivery">Normal (2h) - Free </label>  <br />
-                <input type="checkbox" value="1" name="expressdelivery" />
+                <input type="radio" value="express" name="delivery" required />
                     <label for="expressdelivery">Express (45min) - €5.00 </label> <br />
         </fieldset> <br />
 
